@@ -1,0 +1,27 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask instance folder
+instance/
+flaskr.sqlite
+
+# VSCode
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
+.env.*
+
+# Tailwind output (si generas archivos temporales)
+*.css.map
+
+# Logs
+*.log
