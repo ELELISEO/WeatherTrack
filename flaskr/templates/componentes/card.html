@@ -1,0 +1,45 @@
+{% for tarea in tareas %}
+<div class="h-28 w-96 bg-gray-200 rounded-3xl flex flex-col justify-center items-start p-4 m-2 shadow-md"
+     {% if tarea.sugerir_cambio %}
+     data-mostrar-modal-desde="{{ tarea.mostrar_modal_desde }}"
+     data-modal-idx="{{ loop.index0 }}"
+     {% endif %}
+>
+  <h3 class="text-lg font-bold text-[#253342]">{{ tarea.actividad }}</h3>
+  <h2 class="text-base text-[#253342]">{{ tarea.descripcion or 'Sin descripción' }}</h2>
+  <h1 class="text-sm text-[#253342]">{{ tarea.fecha }} {{ tarea.hora }}</h1>
+  <div class="w-full items-end flex justify-end">
+  <div>
+    {% if tarea.sugerir_cambio %}
+      <button onclick="mostrarModal('{{ loop.index0 }}')" class="ml-2 opacity-40 underline">Clima adverso</button>
+    {% endif %}
+    <i class="fa-solid fa-circle text-{{ 'red' if tarea.sugerir_cambio else 'green' }}-600 text-sm right-4 top-4"></i>
+  </div>
+  </div>
+</div>
+{% if tarea.sugerir_cambio %}
+<!-- Modal -->
+<div id="modal-{{ loop.index0 }}" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white p-8 rounded-3xl flex items-center justify-around flex-col h-76">
+    <h2 class="text-xl font-bold mb-4 text-[#253342]">Clima adverso para esta hora</h2>
+    <p>Pronóstico: {{ tarea.pronostico.descripcion }} ({{ tarea.pronostico.temperatura }}°C)</p>
+    <form id ="cambiar" method="post" action="{{ url_for('modificar_tarea', idx=loop.index0) }}">
+      <label>Nueva fecha: <input type="date" name="fecha" required></label>
+      <label>Nueva hora: <input type="time" name="hora" required></label>
+    </form>
+    <div class="flex justify-around items-center w-56">
+    <button onclick="cerrarModal('{{ loop.index0 }}')" class="text-white bg-red-500 px-4 py-2 rounded">Cancelar</button>
+    <button type="submit" form="cambiar" class="bg-green-600 text-white px-4 py-2 rounded">Guardar</button>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+<script>
+function mostrarModal(idx) {
+  document.getElementById('modal-' + idx).classList.remove('hidden');
+}
+function cerrarModal(idx) {
+  document.getElementById('modal-' + idx).classList.add('hidden');
+}
+</script>
